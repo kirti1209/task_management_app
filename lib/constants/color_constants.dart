@@ -22,7 +22,7 @@ class ColorConstants {
   static const Color textGrey = Color(0xFF6B7280);    // #6B7280
   
   // Page and button colors
-  static const Color pageBgDimWhite = Color(0xFFF5F5F5);  // Dim white background
+  static const Color pageBgDimWhite = Color(0xFFFAFAFA);  // Lighter background
   static const Color startPointBg = Color(0xFFFBD1CB);     // #FBD1CB
   static const Color startPointText = Color(0xFFDC2626);   // #DC2626
 

@@ -7,23 +7,27 @@ class StatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         Expanded(
-          child: StatCard(
-            iconPath: "assets/all_task.svg",
-            title: "All Tasks",
-            value: "30",
-            subtitle: "Total assigned this week",
-            iconBgColor: ColorConstants.iconBgBlue,
+          child: InkWell(
+            onTap: () => Navigator.pushNamed(context, '/all_tasks'),
+            borderRadius: BorderRadius.circular(12),
+            child: const StatCard(
+              iconPath: "assets/all_task.svg",
+              title: "All Tasks",
+              value: "30",
+              subtitle: "Total assigned this week",
+              iconBgColor: ColorConstants.iconBgBlue,
+            ),
           ),
         ),
-        SizedBox(width: 12),
-        Expanded(
+        const SizedBox(width: 16),
+        const Expanded(
           child: StatCard(
             iconPath: "assets/add_task.svg",
             title: "Create Task",
-            value: "+",
+            value: "",
             subtitle: "Add a new task quickly",
             iconBgColor: ColorConstants.iconBgRed,
           ),
@@ -51,64 +55,110 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCreateTask = title == "Create Task";
-    
+    final bool isCreateTask = title == "Create Task";
+
     return Container(
-      height: 140, // Fixed height to ensure equal card sizes
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       decoration: BoxDecoration(
         color: ColorConstants.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: iconBgColor,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                iconPath,
-                width: isCreateTask ? 16 : 17,
-                height: isCreateTask ? 18 : 21,
+          /// Icon with plus badge for Create Task
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: iconBgColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    iconPath,
+                    width: 22,
+                    height: 22,
+                  ),
+                ),
               ),
-            ),
+              if (isCreateTask)
+                Positioned(
+                  top: -4,
+                  right: -4,
+                  child: Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: ColorConstants.iconBgRed,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: ColorConstants.white,
+                        width: 2,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.add,
+                        size: 14,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 14),
+
+          /// Title
           Text(
             title,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               fontSize: 14,
-              color: ColorConstants.textBlack,
+              color: Color(0xFF1A1A1A),
             ),
           ),
+
+          const SizedBox(height: 6),
+
+          /// Value (only for All Tasks)
           if (!isCreateTask) ...[
-            const SizedBox(height: 8),
             Text(
               value,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: ColorConstants.textBlack,
+                fontSize: 36,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1A1A1A),
+                height: 1.2,
               ),
             ),
+            const SizedBox(height: 6),
           ] else
-            const SizedBox(height: 8), // Spacer for Create Task to match height
-          const SizedBox(height: 4),
+            const SizedBox(height: 0),
+
+          /// Subtitle
           Text(
             subtitle,
             textAlign: TextAlign.center,
+            maxLines: 2,
             style: const TextStyle(
               fontSize: 12,
-              color: ColorConstants.textGrey,
+              color: Color(0xFF666666),
+              height: 1.3,
             ),
           ),
         ],

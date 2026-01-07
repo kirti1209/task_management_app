@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_app/constants/color_constants.dart';
 import 'package:task_management_app/core/reusable_components/date_row.dart';
@@ -12,22 +14,79 @@ class HomeHeader extends StatefulWidget {
 
 class _HomeHeaderState extends State<HomeHeader> {
   String username = 'User';
+  File? _profileImage;
 
   @override
   void initState() {
     super.initState();
     _loadUsername();
+    _loadProfileImage();
   }
 
   Future<void> _loadUsername() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedUsername = prefs.getString('username') ?? 'User';
-    if (mounted) {
+    setState(() {
+      username = prefs.getString('username') ?? 'User';
+    });
+  }
+
+  Future<void> _loadProfileImage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final path = prefs.getString('profile_image');
+    if (path != null && mounted) {
       setState(() {
-        username = savedUsername;
+        _profileImage = File(path);
       });
     }
   }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: source, imageQuality: 70);
+
+    if (picked != null) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('profile_image', picked.path);
+
+      setState(() {
+        _profileImage = File(picked.path);
+      });
+    }
+  }
+
+  void _showImagePickerDialog() {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      title: const Text('Change Profile Photo'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: const Text('Camera'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.camera);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.photo_library),
+            title: const Text('Gallery'),
+            onTap: () {
+              Navigator.pop(context);
+              _pickImage(ImageSource.gallery);
+            },
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +104,12 @@ class _HomeHeaderState extends State<HomeHeader> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             "Hello, $username",
@@ -63,10 +120,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          const Text(
-                            "👋",
-                            style: TextStyle(fontSize: 24),
-                          ),
+                          const Text("👋", style: TextStyle(fontSize: 24)),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -75,21 +129,27 @@ class _HomeHeaderState extends State<HomeHeader> {
                         style: TextStyle(
                           color: ColorConstants.white.withOpacity(0.85),
                           fontSize: 13,
-                          height: 1.3,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(
-                  Icons.notifications_none,
-                  size: 24,
-                  color: ColorConstants.white,
-                ),
+                const Icon(Icons.notifications_none,
+                    color: ColorConstants.white),
                 const SizedBox(width: 12),
-                const CircleAvatar(
-                  radius: 20,
-                  backgroundColor: ColorConstants.white,
+
+                /// 🔹 Profile Avatar
+                GestureDetector(
+                 onTap: _showImagePickerDialog,
+
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: ColorConstants.white,
+                    backgroundImage: _profileImage != null
+                        ? FileImage(_profileImage!)
+                        : const AssetImage('assets/avatar_img.jpg')
+                            as ImageProvider,
+                  ),
                 ),
               ],
             ),
