@@ -22,9 +22,14 @@ class ColorConstants {
   static const Color textGrey = Color(0xFF6B7280);    // #6B7280
   
   // Page and button colors
-  static const Color pageBgDimWhite = Color(0xFFFAFAFA);  // Lighter background
+  static const Color pageBgDimWhite = Color(0xFFF5F5F5);  // Dim white background
   static const Color startPointBg = Color(0xFFFBD1CB);     // #FBD1CB
   static const Color startPointText = Color(0xFFDC2626);   // #DC2626
+  static const Color allTaskButtonYellow = Color(0xFFF5B400);
+  static const Color pendingChipBg = Color(0xFFFFF1CC);
+  static const Color pendingChipText = Color(0xFFF5B400);
+  static const Color inputBg = Color(0xFFF3F3F5);
+  static const Color disabledButtonGray = Color(0xFFAAAAAA);
 
   // Gradient
   static const LinearGradient primaryGradient = LinearGradient(
@@ -33,5 +38,9 @@ class ColorConstants {
     colors: [gradientStart, gradientEnd],
   );
 
-}
+  // Note box colors
+  static const Color noteBorderBlue = Color(0xFF5DA4FF);
+  static const Color noteTextMuted = Color(0xFF838592);
+  static const Color noteBgBlueLight = Color(0xFFEFF6FF);
 
+}

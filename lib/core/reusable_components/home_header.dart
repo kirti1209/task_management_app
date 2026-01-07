@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_app/constants/color_constants.dart';
 import 'package:task_management_app/core/reusable_components/date_row.dart';
+import 'package:task_management_app/constants/asset_constants.dart';
 
 class HomeHeader extends StatefulWidget {
   const HomeHeader({super.key});
@@ -147,7 +148,7 @@ class _HomeHeaderState extends State<HomeHeader> {
                     backgroundColor: ColorConstants.white,
                     backgroundImage: _profileImage != null
                         ? FileImage(_profileImage!)
-                        : const AssetImage('assets/avatar_img.jpg')
+                        : const AssetImage(AssetConstants.avatarImg)
                             as ImageProvider,
                   ),
                 ),

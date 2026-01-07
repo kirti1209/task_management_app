@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants/color_constants.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
@@ -42,35 +41,45 @@ class CustomBottomNavigation extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
         items: [
-          _buildNavItem(0, "assets/home.svg", "Home"),
-          _buildNavItem(1, "assets/bottom_nav_2.svg", ""),
-          _buildNavItem(2, "assets/bottom_nav_3.svg", ""),
+          BottomNavigationBarItem(
+            icon: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: currentIndex == 0
+                    ? ColorConstants.orange
+                    : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.home,
+                color: currentIndex == 0
+                    ? ColorConstants.white
+                    : ColorConstants.gray,
+                size: 20,
+              ),
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.business,
+              color: currentIndex == 1
+                  ? ColorConstants.orange
+                  : ColorConstants.gray,
+            ),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.assignment,
+              color: currentIndex == 2
+                  ? ColorConstants.orange
+                  : ColorConstants.gray,
+            ),
+            label: '',
+          ),
         ],
       ),
-    );
-  }
-
-  BottomNavigationBarItem _buildNavItem(
-      int index, String assetPath, String label) {
-    final isSelected = currentIndex == index;
-    return BottomNavigationBarItem(
-      icon: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: isSelected ? ColorConstants.primaryGradient : null,
-          shape: BoxShape.circle,
-        ),
-        child: SvgPicture.asset(
-          assetPath,
-          width: isSelected ? 22 : 18,
-          height: isSelected ? 22 : 18,
-          colorFilter: ColorFilter.mode(
-            isSelected ? ColorConstants.white : ColorConstants.gray,
-            BlendMode.srcIn,
-          ),
-        ),
-      ),
-      label: label,
     );
   }
 }

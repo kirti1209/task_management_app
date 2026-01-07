@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_management_app/constants/color_constants.dart';
+import 'package:task_management_app/constants/asset_constants.dart';
 
 class StatsSection extends StatelessWidget {
   const StatsSection({super.key});
@@ -14,7 +15,7 @@ class StatsSection extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, '/all_tasks'),
             borderRadius: BorderRadius.circular(12),
             child: const StatCard(
-              iconPath: "assets/all_task.svg",
+              iconPath: AssetConstants.allTaskSvg,
               title: "All Tasks",
               value: "30",
               subtitle: "Total assigned this week",
@@ -23,13 +24,17 @@ class StatsSection extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        const Expanded(
-          child: StatCard(
-            iconPath: "assets/add_task.svg",
-            title: "Create Task",
-            value: "",
-            subtitle: "Add a new task quickly",
-            iconBgColor: ColorConstants.iconBgRed,
+        Expanded(
+          child: InkWell(
+            onTap: () => Navigator.pushNamed(context, '/create_task'),
+            borderRadius: BorderRadius.circular(12),
+            child: const StatCard(
+              iconPath: AssetConstants.addTaskSvg,
+              title: "Create Task",
+              value: "",
+              subtitle: "Add a new task quickly",
+              iconBgColor: ColorConstants.iconBgRed,
+            ),
           ),
         ),
       ],
@@ -92,30 +97,7 @@ class StatCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isCreateTask)
-                Positioned(
-                  top: -4,
-                  right: -4,
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: ColorConstants.iconBgRed,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: ColorConstants.white,
-                        width: 2,
-                      ),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.add,
-                        size: 14,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                ),
+              
             ],
           ),
 
@@ -140,7 +122,7 @@ class StatCard extends StatelessWidget {
               value,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 36,
+                fontSize: 38,
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF1A1A1A),
                 height: 1.2,
@@ -151,16 +133,38 @@ class StatCard extends StatelessWidget {
             const SizedBox(height: 0),
 
           /// Subtitle
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Color(0xFF666666),
-              height: 1.3,
+          if (isCreateTask) ...[
+            const Text(
+              'Add a new task',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF666666),
+                height: 1.3,
+              ),
             ),
-          ),
+            const Text(
+              'quickly',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFF666666),
+                height: 1.3,
+              ),
+            ),
+            const SizedBox(height: 48),
+          ] else ...[
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF666666),
+                height: 1.3,
+              ),
+            ),
+          ],
         ],
       ),
     );

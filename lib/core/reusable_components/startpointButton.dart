@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:task_management_app/constants/color_constants.dart';
+import 'package:task_management_app/constants/asset_constants.dart';
 
 class StartPointButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -29,7 +30,7 @@ class StartPointButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                "assets/startbutton.svg",
+                AssetConstants.startButtonSvg,
                 width: 16,
                 height: 16,
                 colorFilter: const ColorFilter.mode(
@@ -53,4 +54,3 @@ class StartPointButton extends StatelessWidget {
     );
   }
 }
-

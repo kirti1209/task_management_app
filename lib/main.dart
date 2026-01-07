@@ -4,6 +4,8 @@ import 'package:task_management_app/features/home/presentation/screens/home_scre
 import 'core/di/injection_container.dart';
 import 'features/login/presentation/bloc/login_event.dart';
 import 'features/login/presentation/screens/login_screen.dart';
+import 'features/all_tasks/presentation/screens/all_tasks_screen.dart';
+import 'features/create_task/presentation/screens/create_task_screen.dart';
 
 
 void main() async {
@@ -30,6 +32,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/home': (context) => const HomeScreen(),
+        '/all_tasks': (context) => const AllTasksScreen(),
+        '/create_task': (context) => const CreateTaskScreen(),
       },
     );
   }
