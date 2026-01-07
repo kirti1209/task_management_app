@@ -21,21 +21,28 @@ class _DateRowState extends State<DateRow> {
       ("Wed", "23", "Oct"),
     ];
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(dates.length, (index) {
-        return DateChip(
-          day: dates[index].$1,
-          date: dates[index].$2,
-          month: dates[index].$3,
-          isActive: index == selectedIndex,
-          onTap: () {
-            setState(() {
-              selectedIndex = index;
-            });
-          },
-        );
-      }),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(dates.length, (index) {
+          return Padding(
+            padding: EdgeInsets.only(
+              right: index == dates.length - 1 ? 0 : 12,
+            ),
+            child: DateChip(
+              day: dates[index].$1,
+              date: dates[index].$2,
+              month: dates[index].$3,
+              isActive: index == selectedIndex,
+              onTap: () {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+            ),
+          );
+        }),
+      ),
     );
   }
 }
@@ -56,60 +63,66 @@ class DateChip extends StatelessWidget {
     this.onTap,
   });
 
-  Widget _buildGradientText(String text, double fontSize, FontWeight fontWeight) {
-    if (isActive) {
-      return ShaderMask(
-        shaderCallback: (bounds) => ColorConstants.primaryGradient.createShader(
-          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-        ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            color: Colors.white,
-          ),
-        ),
-      );
-    } else {
-      return Text(
-        text,
-        style: TextStyle(
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          color: ColorConstants.white,
-        ),
-      );
-    }
+  Widget _gradientText(
+    String text,
+    double fontSize,
+    FontWeight weight,
+  ) {
+    return isActive
+        ? ShaderMask(
+            shaderCallback: (bounds) =>
+                ColorConstants.primaryGradient.createShader(
+              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+            ),
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: weight,
+                color: Colors.white,
+              ),
+            ),
+          )
+        : Text(
+            text,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: weight,
+              color: ColorConstants.white,
+            ),
+          );
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    /// Base responsive size
+    final baseWidth = screenWidth * 0.17;
+    final baseHeight = baseWidth * 1.35;
+
+    /// Slight scale for active (NOT pixel based)
+    final scale = isActive ? 1.12 : 1.0;
+
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: isActive ? 81 : 63,
-        height: isActive ? 102 : 84,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+        width: baseWidth * scale,
+        height: baseHeight * scale,
         decoration: BoxDecoration(
           color: isActive
-              ? ColorConstants.dateActive // #FFFFFFD9 - 85% opacity
-              : ColorConstants.dateInactive, // #FFFFFF33 - 20% opacity
+              ? ColorConstants.dateActive
+              : ColorConstants.dateInactive,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildGradientText(
-              day,
-              11,
-              FontWeight.w500,
-            ),
+            _gradientText(day, 11, FontWeight.w500),
             const SizedBox(height: 4),
-            _buildGradientText(
-              date,
-              18,
-              FontWeight.w700,
-            ),
+            _gradientText(date, 18, FontWeight.w700),
             const SizedBox(height: 2),
             isActive
                 ? ShaderMask(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constants/color_constants.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String label;
   final String placeholder;
   final bool obscureText;
@@ -16,12 +16,25 @@ class CustomTextField extends StatelessWidget {
   });
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late bool _obscured;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscured = widget.obscureText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          widget.label,
           style: const TextStyle(
             color: ColorConstants.fieldLabelColor,
             fontSize: 14,
@@ -35,14 +48,27 @@ class CustomTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextField(
-            controller: controller,
-            obscureText: obscureText,
+            controller: widget.controller,
+            obscureText: _obscured,
             decoration: InputDecoration(
-              hintText: placeholder,
+              hintText: widget.placeholder,
               hintStyle: const TextStyle(
                 color: ColorConstants.gray,
                 fontSize: 14,
               ),
+              suffixIcon: widget.obscureText
+                  ? IconButton(
+                      icon: Icon(
+                        _obscured ? Icons.visibility_off : Icons.visibility,
+                        color: ColorConstants.gray,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscured = !_obscured;
+                        });
+                      },
+                    )
+                  : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,

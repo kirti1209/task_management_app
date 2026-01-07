@@ -87,78 +87,88 @@ class _HomeHeaderState extends State<HomeHeader> {
     ),
   );
 }
+@override
+Widget build(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  final topPadding = MediaQuery.of(context).padding.top;
 
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 240,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 36, 16, 20),
-        decoration: const BoxDecoration(
-          gradient: ColorConstants.primaryGradient,
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(28),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  return Container(
+    height: MediaQuery.of(context).size.height * 0.25
+,
+    padding: EdgeInsets.fromLTRB(
+      16,
+      topPadding + size.height * 0.02,
+      16,
+      size.height * 0.015, // 🔹 reduced bottom padding
+    ),
+    decoration: const BoxDecoration(
+      gradient: ColorConstants.primaryGradient,
+      borderRadius: BorderRadius.vertical(
+        bottom: Radius.circular(28),
+      ),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Hello, $username",
-                            style: const TextStyle(
-                              color: ColorConstants.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          const Text("👋", style: TextStyle(fontSize: 24)),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
                       Text(
-                        "Ready for today's Task?",
+                        "Hello, $username",
                         style: TextStyle(
-                          color: ColorConstants.white.withOpacity(0.85),
-                          fontSize: 13,
+                          color: ColorConstants.white,
+                          fontSize: size.width * 0.06,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        "👋",
+                        style: TextStyle(
+                          fontSize: size.width * 0.06,
                         ),
                       ),
                     ],
                   ),
-                ),
-                const Icon(Icons.notifications_none,
-                    color: ColorConstants.white),
-                const SizedBox(width: 12),
-
-                /// 🔹 Profile Avatar
-                GestureDetector(
-                 onTap: _showImagePickerDialog,
-
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: ColorConstants.white,
-                    backgroundImage: _profileImage != null
-                        ? FileImage(_profileImage!)
-                        : const AssetImage(AssetConstants.avatarImg)
-                            as ImageProvider,
+                  SizedBox(height: size.height * 0.004), // 🔹 tighter
+                  Text(
+                    "Ready for today's Task?",
+                    style: TextStyle(
+                      color: ColorConstants.white.withOpacity(0.85),
+                      fontSize: size.width * 0.035,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            const SizedBox(height: 14),
-            const DateRow(),
+            const Icon(Icons.notifications_none,
+                color: ColorConstants.white),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: _showImagePickerDialog,
+              child: CircleAvatar(
+                radius: size.width * 0.045,
+                backgroundColor: ColorConstants.white,
+                backgroundImage: _profileImage != null
+                    ? FileImage(_profileImage!)
+                    : const AssetImage(AssetConstants.avatarImg)
+                        as ImageProvider,
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
+
+        /// 🔹 LESS but STANDARD spacing above chips
+        SizedBox(height: size.height * 0.012),
+
+        const DateRow(),
+      ],
+    ),
+  );
+}
 }

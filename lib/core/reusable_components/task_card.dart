@@ -57,7 +57,7 @@ class TaskCard extends StatelessWidget {
               ),
               children: [
                 TextSpan(text: "Due $dueDate - Status: "),
-                TextSpan(
+                const TextSpan(
                   text: "Pending",
                   style: TextStyle(
                     color: ColorConstants.orange,
